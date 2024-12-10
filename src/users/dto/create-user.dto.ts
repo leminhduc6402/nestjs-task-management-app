@@ -10,9 +10,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
   active: boolean;
 
-  @IsNotEmpty()
   avatar: string;
 }

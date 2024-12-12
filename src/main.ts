@@ -15,8 +15,17 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view
   app.setViewEngine('ejs');
 
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalPipes(new ValidationPipe()); // Validate
+  app.useGlobalGuards(new JwtAuthGuard(reflector)); // Config use global AuthGuard
+
+  //config CORS (Cross-Origin Resource Sharing)
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    credentials: true,
+    allowedHeaders: ['Content-Type'],
+  });
 
   await app.listen(configService.get<string>('PORT') || 3001);
 }

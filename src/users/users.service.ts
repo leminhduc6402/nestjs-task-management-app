@@ -25,6 +25,10 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
+  async findUserByEmail(email: string) {
+    return await this.userModel.findOne({ email }).select('-refreshToken');
+  }
+
   async create(createUserDto: CreateUserDto) {
     const { name, email, password, active, avatar } = createUserDto;
 

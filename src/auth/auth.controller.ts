@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request as Req } from 'express';
+import { Public } from 'src/customDecorator/customize';
 
 @Controller('auth')
 export class AuthController {

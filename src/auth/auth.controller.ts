@@ -3,11 +3,14 @@ import { Request as Req } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { Public, ResponseMessage } from 'src/customDecorator/customize';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
+  @ResponseMessage('Login Success')
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async login(

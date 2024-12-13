@@ -10,6 +10,7 @@ import { User } from './schemas/user.schema';
 import mongoose, { Model } from 'mongoose';
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import aqp from 'api-query-params';
+import { IUser } from './user.interface';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +30,8 @@ export class UsersService {
     return await this.userModel.findOne({ email }).select('-refreshToken');
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, user: IUser) {
+    console.log(user);
     const { name, email, password, active, avatar } = createUserDto;
 
     const isEmailValid = await this.userModel.findOne({ email });
@@ -89,7 +91,7 @@ export class UsersService {
     return user;
   }
 
-  async update(updateUserDto: UpdateUserDto) {
+  async update(updateUserDto: UpdateUserDto, user: IUser) {
     const { _id, active, avatar, email, name } = updateUserDto;
 
     const checkValidEmail = await this.userModel.findOne({ email });
@@ -99,12 +101,12 @@ export class UsersService {
 
     return await this.userModel.findByIdAndUpdate(
       { _id },
-      { active, avatar, email, name },
+      { active, avatar, email, name, updatedBy: user._id },
       { new: true },
     );
   }
 
-  async remove(_id: string) {
+  async remove(_id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw new NotFoundException('Not Found User');
     }
@@ -112,6 +114,8 @@ export class UsersService {
       { _id },
       {
         isDeleted: true,
+        deletedBy: user._id,
+        deletedAt: new Date(),
       },
       { new: true },
     );

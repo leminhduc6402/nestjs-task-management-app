@@ -3,20 +3,22 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { TransformInterceptor } from './core/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = new ConfigService();
   const reflector = app.get(Reflector);
 
+  app.useGlobalPipes(new ValidationPipe()); // Validate
+  app.useGlobalGuards(new JwtAuthGuard(reflector)); // Config use global AuthGuard
+  app.useGlobalInterceptors(new TransformInterceptor(reflector));
+
   app.useStaticAssets(join(__dirname, '..', 'public')); // access js, css, images
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view
   app.setViewEngine('ejs');
-
-  app.useGlobalPipes(new ValidationPipe()); // Validate
-  app.useGlobalGuards(new JwtAuthGuard(reflector)); // Config use global AuthGuard
 
   //config CORS (Cross-Origin Resource Sharing)
   app.enableCors({
@@ -25,6 +27,13 @@ async function bootstrap() {
     preflightContinue: false,
     credentials: true,
     allowedHeaders: ['Content-Type'],
+  });
+
+  // config versioning -- apis version
+  app.setGlobalPrefix('api');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: ['1'],
   });
 
   await app.listen(configService.get<string>('PORT') || 3001);

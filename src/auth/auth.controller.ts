@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
-import { Request as Req } from 'express';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { Public, ResponseMessage, User } from 'src/customDecorator/customize';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Public, ResponseMessage } from 'src/customDecorator/customize';
+import { Request, Response } from 'express';
+import { IUser } from 'src/users/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -13,16 +21,29 @@ export class AuthController {
   @ResponseMessage('Login Success')
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  async login(
-    @Request() request: Req,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return await this.authService.login(request.user);
+  async login(@Req() req: any, @Res({ passthrough: true }) response: Response) {
+    return await this.authService.login(req.user, response);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() request: Req) {
-    return request.user;
+  @ResponseMessage('Logout user')
+  @Post('/logout')
+  handleLogout(
+    @Res({ passthrough: true }) response: Response,
+    @User() user: IUser,
+  ) {
+    return this.authService.logout(response, user);
+  }
+
+  @ResponseMessage('Get user by refresh token')
+  @Get('/refresh')
+  handleRefreshAccount(
+    @Req() req: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const refreshToken = req.cookies['refresh_token'];
+    if (!refreshToken) {
+      throw new BadRequestException('Not found refresh token');
+    }
+    return this.authService.processNewToken(refreshToken, response);
   }
 }

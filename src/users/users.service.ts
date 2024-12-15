@@ -26,9 +26,17 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
+  updateUserToken = async (refreshToken: string, _id: string) => {
+    return await this.userModel.updateOne({ _id }, { refreshToken });
+  };
+
   async findUserByEmail(email: string) {
     return await this.userModel.findOne({ email }).select('-refreshToken');
   }
+
+  findUserByToken = async (refreshToken: string) => {
+    return await this.userModel.findOne({ refreshToken });
+  };
 
   async create(createUserDto: CreateUserDto, user: IUser) {
     console.log(user);

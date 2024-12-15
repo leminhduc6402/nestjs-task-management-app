@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import cookieParser from 'cookie-parser';
 import { TransformInterceptor } from './core/transform.interceptor';
 
 async function bootstrap() {
@@ -28,6 +29,9 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: ['Content-Type'],
   });
+
+  //config cookies
+  app.use(cookieParser());
 
   // config versioning -- apis version
   app.setGlobalPrefix('api');

@@ -39,7 +39,6 @@ export class UsersService {
   };
 
   async create(createUserDto: CreateUserDto, user: IUser) {
-    console.log(user);
     const { name, email, password, active, avatar } = createUserDto;
 
     const isEmailValid = await this.userModel.findOne({ email });
@@ -54,6 +53,7 @@ export class UsersService {
       password: hashPassword,
       active,
       avatar,
+      createdBy: user._id,
     });
     return newUser;
   }
@@ -116,7 +116,7 @@ export class UsersService {
 
   async remove(_id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new NotFoundException('Not Found User');
+      throw new NotFoundException('Invalid ID');
     }
     return await this.userModel.findOneAndUpdate(
       { _id },

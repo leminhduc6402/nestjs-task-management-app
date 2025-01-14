@@ -36,7 +36,7 @@ export class FilesController {
     return this.filesService.findAll(+currentPage, +limit, qs);
   }
 
-  @Delete('remove/:id')
+  @Delete(':id')
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.filesService.remove(id, user);
   }

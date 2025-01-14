@@ -8,6 +8,7 @@ import { File } from './schemas/file.schema';
 @Injectable()
 export class FilesService {
   constructor(@InjectModel(File.name) private fileModel: Model<File>) {}
+
   async create(file: Express.Multer.File, user: IUser) {
     const { _id } = user;
     const { filename, mimetype, path, size, originalname } = file;

@@ -54,6 +54,7 @@ export class UsersService {
       active,
       avatar,
       createdBy: user._id,
+      isDeleted: false,
     });
     return newUser;
   }

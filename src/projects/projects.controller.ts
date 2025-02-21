@@ -11,7 +11,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { User } from 'src/customDecorator/customize';
+import { Public, User } from 'src/customDecorator/customize';
 import { IUser } from 'src/users/user.interface';
 
 @Controller('projects')
@@ -23,6 +23,7 @@ export class ProjectsController {
     return this.projectsService.create(createProjectDto, user);
   }
 
+  @Public()
   @Get()
   findAll(
     @Query('current') currentPage: string,

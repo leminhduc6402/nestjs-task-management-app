@@ -1,14 +1,19 @@
-import { IsEmpty } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsDate, IsNotEmpty } from 'class-validator';
 
 export class CreateProjectDto {
-  @IsEmpty()
+  @IsNotEmpty()
   name: string;
 
   description: string;
 
-  @IsEmpty()
+  @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
   startDate: Date;
 
-  @IsEmpty()
+  @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
   endDate: Date;
 }

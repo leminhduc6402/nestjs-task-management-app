@@ -1,13 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { BaseSchema } from 'src/common/BaseSchema';
 import { PriorityEnum, TaskStatusEnum } from 'src/common/enum';
 import { User } from 'src/users/schemas/user.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
 
 @Schema({ timestamps: true })
-export class Task extends BaseSchema {
+export class Task {
   @Prop({ required: true })
   title: string;
 
@@ -41,8 +40,26 @@ export class Task extends BaseSchema {
   @Prop()
   attachments: string;
 
-  // @Prop()
-  // comments: string;
+  @Prop()
+  createdAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  createdBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop()
+  updatedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  updatedBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop()
+  deletedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  deletedBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

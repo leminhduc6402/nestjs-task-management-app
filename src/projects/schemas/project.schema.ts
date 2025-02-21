@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { BaseSchema } from 'src/common/BaseSchema';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { User } from 'src/users/schemas/user.schema';
 
 export type ProjectDocument = HydratedDocument<Project>;
 
 @Schema({ timestamps: true })
-export class Project extends BaseSchema {
+export class Project {
   @Prop({ required: true })
   name: string;
 
@@ -17,6 +17,27 @@ export class Project extends BaseSchema {
 
   @Prop({ required: true })
   endDate: Date;
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  createdBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop()
+  updatedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  updatedBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop()
+  deletedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  deletedBy: mongoose.Schema.Types.ObjectId; // ref: user
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

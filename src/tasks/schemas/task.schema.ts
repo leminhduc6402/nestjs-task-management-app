@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { PriorityEnum, TaskStatusEnum } from 'src/common/enum';
+import { PriorityEnum } from 'src/common/enum';
+import { Project } from 'src/projects/schemas/project.schema';
 import { User } from 'src/users/schemas/user.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
@@ -13,8 +14,8 @@ export class Task {
   @Prop()
   description: string;
 
-  @Prop({ required: true, enum: TaskStatusEnum })
-  status: TaskStatusEnum;
+  @Prop({ required: true })
+  status: string;
 
   @Prop({ required: true, enum: PriorityEnum })
   priority: PriorityEnum;
@@ -31,8 +32,8 @@ export class Task {
   @Prop()
   points: number;
 
-  @Prop()
-  projectId: string; // ref to project
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Project.name })
+  projectId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   assignedUser: mongoose.Schema.Types.ObjectId;

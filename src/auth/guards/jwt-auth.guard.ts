@@ -2,13 +2,13 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { AuthGuard } from "@nestjs/passport";
-import { IS_PUBLIC_KEY } from "src/customDecorator/customize";
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
+import { IS_PUBLIC_KEY } from 'src/customDecorator/customize';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard("jwt") {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }
@@ -28,7 +28,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       throw (
         err ||
         new UnauthorizedException(
-          "Invalid email or password. Please try again.",
+          'Invalid email or password. Please try again.',
         )
       );
     }

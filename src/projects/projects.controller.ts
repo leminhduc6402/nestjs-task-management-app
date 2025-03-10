@@ -1,18 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { ProjectsService } from './projects.service';
+import { User } from 'src/customDecorator/customize';
+import { IUser } from 'src/users/user.interface';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { Public, User } from 'src/customDecorator/customize';
-import { IUser } from 'src/users/user.interface';
+import { ProjectsService } from './projects.service';
 
 @Controller('projects')
 export class ProjectsController {
@@ -23,7 +23,6 @@ export class ProjectsController {
     return this.projectsService.create(createProjectDto, user);
   }
 
-  @Public()
   @Get()
   findAll(
     @Query('current') currentPage: string,

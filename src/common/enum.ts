@@ -1,12 +1,6 @@
 export enum PriorityEnum {
   LOW = 'LOW',
-  MEDIUM = 'REJECTED',
-  HIGH = 'APPROVED',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
   CRITICAL = 'CRITICAL',
-}
-export enum TaskStatusEnum {
-  TODO = 'TODO',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  BLOCKED = 'BLOCKED',
 }

@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { PriorityEnum, TaskStatusEnum } from 'src/common/enum';
+import { PriorityEnum } from 'src/common/enum';
 
 export class CreateTaskDto {
   @IsNotEmpty()
@@ -8,7 +8,6 @@ export class CreateTaskDto {
   description: string;
 
   @IsNotEmpty()
-  @IsEnum(TaskStatusEnum)
   status: string;
 
   @IsNotEmpty()
